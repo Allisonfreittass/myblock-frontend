@@ -14,7 +14,7 @@ import Navbar from '../components/Navbar.vue';
 
 <style scoped>
 .page-wrapper {
-  background-color: #f7fafc;
+  background-color: #0a101d;
   min-height: 100vh;
 }
 

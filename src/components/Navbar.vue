@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar-container">
     <div class="navbar-header">
-      <img src="/src/assets/Images/logoName.png" alt="MyBlock Logo" class="logo" />
+      <!--<img src="/src/assets/Images/logoName.png" alt="MyBlock Logo" class="logo" /> -->
       <span class="logo-name">MyBlock</span>
     </div>
 
@@ -32,7 +32,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  background-color: #ffffff;
+  background-color: #141d30;
   z-index: 1000;
   box-shadow: 2px 0 10px rgba(0,0,0,0.1);
   display: flex;
@@ -59,6 +59,7 @@
 .logo {
   height: 35px;
   flex-shrink: 0;
+  width: 50px;
 }
 
 .nav-links {
@@ -73,7 +74,7 @@
   height: 50px;
   padding: 0 1.5rem;
   text-decoration: none;
-  color: #4a5568;
+  color: #fdfdfd;
   font-weight: 500;
   transition: background-color 0.2s;
   white-space: nowrap;
@@ -100,7 +101,7 @@
   margin-left: 0.75rem;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #1a202c;
+  color: #ffff;
   opacity: 0; 
   transition: opacity 0.2s ease-in-out;
   white-space: nowrap;

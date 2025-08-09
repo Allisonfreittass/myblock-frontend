@@ -30,8 +30,6 @@
 <script setup>
 import { ref } from 'vue';
 
-// DADOS DE EXEMPLO (MOCK DATA)
-// No futuro, estes dados virão da sua API
 const properties = ref([
   { id: 1, address: '123 Maple St', details: '3 bathroom 1.2 bathroom', imageUrl: 'https://via.placeholder.com/150' },
   { id: 2, address: '456 Oak Ave', details: '4 bathroom 1.4 bathroom', imageUrl: 'https://via.placeholder.com/150' },
@@ -43,7 +41,9 @@ const properties = ref([
 .page-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #1a202c;
+  color: #eeeeee;
+  align-items: center;
+  align-content: left;
   margin-bottom: 2rem;
 }
 .summary-cards {
@@ -53,23 +53,24 @@ const properties = ref([
 }
 .card {
   flex: 1;
-  background: #fff;
+  background: #121b2d;
   padding: 1.5rem;
   border-radius: 0.5rem;
   border: 1px solid #e2e8f0;
 }
 .card h3 {
   margin: 0 0 0.5rem 0;
-  color: #4a5568;
+  color: #ffffff;
 }
 .card .count {
   font-size: 2.25rem;
   font-weight: bold;
-  color: #1a202c;
+  color: #ffffff;
 }
 .properties-section h2 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  color: #ffffff;
 }
 .property-list {
   display: flex;
@@ -79,7 +80,7 @@ const properties = ref([
 .property-item {
   display: flex;
   align-items: center;
-  background: #fff;
+  background: #121b2d;
   padding: 1rem;
   border-radius: 0.5rem;
   border: 1px solid #e2e8f0;
@@ -93,11 +94,11 @@ const properties = ref([
 }
 .property-details .address {
   font-weight: bold;
-  color: #1a202c;
+  color: #ffffff;
   margin: 0;
 }
 .property-details .info {
-  color: #718096;
+  color: #ffffff;
   margin: 0.25rem 0 0 0;
 }
 </style>
