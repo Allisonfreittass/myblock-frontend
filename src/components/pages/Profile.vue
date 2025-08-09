@@ -58,10 +58,12 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { ethers } from 'ethers';
+import { useToast } from 'vue-toastification';
 
 const user = ref(null);
 const loading = ref(false);
 const router = useRouter();
+const toast = useToast();
 
 const fileInput = ref(null);
 const selectedFile = ref(null)
@@ -112,10 +114,10 @@ async function updateProfile() {
         user.value = data.user; 
         selectedFile.value = null
         imagePreviewUrl.value = null
-        alert('Perfil atualizado com sucesso!');
+        toast.success('Perfil atualizado com sucesso!');
     } catch (error) {
         console.error(error);
-        alert('Erro ao salvar perfil.');
+        toast.error('Erro ao salvar perfil.');
     } finally {
         loading.value = false;
     }
@@ -147,7 +149,7 @@ async function fetchUserProfile() {
 
 async function connectWallet() {
     if (typeof window.ethereum === 'undefined')
-        return alert('MetaMask não está instalada')
+        return toast.error('MetaMask não está instalada')
 
     try {
         const provider = new ethers.BrowserProvider(window.ethereum);
@@ -169,7 +171,7 @@ async function connectWallet() {
 
         const data = await response.json();
         user.value = data.user;
-        alert('Carteira Atualizada com successo')
+        toast.success('Carteira Atualizada com successo')
     } catch (error) {
         console.error('', error)
         throw error

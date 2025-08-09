@@ -30,12 +30,14 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
 
 const email = ref('');
 const password = ref('');
 const error = ref(null);
 const loading = ref(false);
 const router = useRouter();
+const toast = useToast()
 
 async function handleLogin() {
   loading.value = true;
@@ -54,9 +56,11 @@ async function handleLogin() {
     }
     
     localStorage.setItem('authToken', data.token);
-    router.push('/dashboard'); // Redireciona para o painel principal
+    router.push('/dashboard');
+    toast.success('Login realizado com sucesso!')
   } catch (err) {
     error.value = err.message;
+    toast.error('Falha ao executar login')
   } finally {
     loading.value = false;
   }
