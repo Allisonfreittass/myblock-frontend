@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">Dashboard</h1>
+    <h1 class="page-title">DASHBOARD</h1>
 
     <div class="summary-cards">
       <div class="card">
@@ -13,7 +13,7 @@
     </div>
 
     <div class="properties-section">
-      <h2>Properties</h2>
+      <h2>PROPRIEDADES</h2>
       <div class="property-list">
         <div v-for="prop in properties" :key="prop.id" class="property-item">
           <img :src="prop.imageUrl" :alt="prop.address" class="property-image" />
@@ -39,6 +39,7 @@ const properties = ref([
 
 <style scoped>
 .page-title {
+  text-align: left;
   font-size: 2rem;
   font-weight: bold;
   color: #eeeeee;
@@ -66,6 +67,7 @@ const properties = ref([
   color: #ffffff;
 }
 .properties-section h2 {
+  text-align: left;
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: #ffffff;
