@@ -23,7 +23,7 @@
 }
 
 .auth-panel {
-  width: 480px;
+  width: 550px;
   flex-shrink: 0;
   background-color: #1a202c;
   color: white;

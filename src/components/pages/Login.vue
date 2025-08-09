@@ -64,7 +64,6 @@ async function handleLogin() {
 </script>
 
 <style scoped>
-/* Estilos específicos para o formulário */
 .title {
   font-size: 2rem;
   font-weight: bold;

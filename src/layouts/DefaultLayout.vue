@@ -2,7 +2,7 @@
     <div class="default-layout">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <img src="../assets//Images/logoName.png" alt="MyBlock Logo" class="logo">
+                <img src="../assets//Images/background.png" alt="MyBlock Logo" class="logo">
             </div>
             <nav class="sidebar-nav">
                 <router-link to="/dashboard" class="nav-item">

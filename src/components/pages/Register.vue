@@ -5,6 +5,14 @@
 
     <form @submit.prevent="handleRegister" class="form-container">
       <div class="input-group">
+        <button type="button" @click="connectWallet" v-if="!walletAddress" class="wallet-button" :disabled="loading">
+          {{ loading ? 'Conectando...' : 'Conectar carteira' }}
+        </button>
+        <div v-else class="wallet-address">
+          Conectado: {{ formattedWalletAddress }}
+        </div>
+      </div>
+      <div class="input-group">
         <label for="email">Email</label>
         <input id="email" type="email" v-model="email" required />
       </div>
@@ -20,7 +28,7 @@
       <p v-if="error" class="error-message">{{ error }}</p>
       
       <button type="submit" class="submit-button" :disabled="loading">
-        {{ loading ? 'Creating Account...' : 'Criar conta' }}
+        {{ loading ? 'Criando conta...' : 'Criar conta' }}
       </button>
 
       <p class="switch-form">
@@ -32,15 +40,38 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { ethers } from 'ethers';
 
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+const walletAddress = ref(null);
 const error = ref(null);
 const loading = ref(false);
 const router = useRouter();
+
+const formattedWalletAddress = computed(() => {
+  if (!walletAddress.value ) return '';
+  const addr = walletAddress.value
+  return `${addr.substring(0,6)}...${addr.substring(addr.length - 4)}`
+})
+
+async function connectWallet() {
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts = await provider.send('eth_requestAccounts', []);
+      walletAddress.value = accounts[0]
+    } catch(error){
+      console.error('Conexão com a carteira falhou', error.message)
+      throw error
+    }
+  } else {
+    alert('MetaMask não instalado no navegador')
+  }
+}
 
 async function handleRegister() {
   if (password.value !== confirmPassword.value) {
@@ -53,7 +84,7 @@ async function handleRegister() {
     const response = await fetch('http://localhost:3000/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.value, password: password.value })
+      body: JSON.stringify({ email: email.value, password: password.value, walletAddress: walletAddress.value })
     });
     const data = await response.json();
     if (!response.ok) {
@@ -70,7 +101,25 @@ async function handleRegister() {
 </script>
 
 <style scoped>
-/* Estilos específicos para o formulário */
+.wallet-button {
+  background-color: #4a5568;
+  color: white;
+  padding: 0.75rem;
+  border: 1px solid #718096;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.wallet-address {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+  color: #a0aec0;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-family: monospace;
+  text-align: center;
+}
 .title {
   font-size: 2rem;
   font-weight: bold;
