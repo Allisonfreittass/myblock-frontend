@@ -105,30 +105,30 @@ async function fetchUserProfile() {
 .page-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #1a202c;
+  color: #ffffff;
   margin-bottom: 2rem;
 }
 .card {
-  background: #fff;
+  background: #131c2e;
   padding: 2rem;
   border-radius: 0.5rem;
   border: 1px solid #e2e8f0;
 }
 .profile-info p {
   font-size: 1.1rem;
-  color: #4a5568;
+  color: #ffffff;
 }
 .wallet-section {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid #fafcff;
 }
 .wallet-address {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-top: 0.5rem;
-  background-color: #f8fafc;
+  background-color: #ffffff;
   padding: 0.75rem;
   border-radius: 0.375rem;
   font-family: monospace;
