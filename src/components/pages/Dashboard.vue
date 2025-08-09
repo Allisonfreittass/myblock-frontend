@@ -55,8 +55,6 @@ const properties = ref([
   flex: 1;
   background: #121b2d;
   padding: 1.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid #e2e8f0;
 }
 .card h3 {
   margin: 0 0 0.5rem 0;
@@ -72,6 +70,12 @@ const properties = ref([
   margin-bottom: 1rem;
   color: #ffffff;
 }
+.card:hover, .property-item:hover {
+  /* Efeito de "elevar" ao passar o mouse */
+  transform: translateY(-1px);
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
 .property-list {
   display: flex;
   flex-direction: column;
@@ -82,8 +86,6 @@ const properties = ref([
   align-items: center;
   background: #121b2d;
   padding: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #e2e8f0;
 }
 .property-image {
   width: 80px;
