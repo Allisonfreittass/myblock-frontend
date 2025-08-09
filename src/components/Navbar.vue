@@ -18,10 +18,13 @@
         <span class="material-symbols-outlined">gavel</span>
         <span class="link-text">Contratos</span>
       </router-link>
-      <router-link to="/profile" class="nav-item">
+    </div>
+
+    <div class="navbar-footer">
+        <router-link to="/profile" class="nav-item">
         <span class="material-symbols-outlined">account_circle</span>
         <span class="link-text">Perfil</span>
-      </router-link>
+        </router-link>
     </div>
   </nav>
 </template>
@@ -113,6 +116,13 @@
 
 .nav-item:hover {
   background-color: #f1f5f9;
+}
+
+.navbar-footer {
+  margin-top: auto; 
+  
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
 }
 
 .router-link-exact-active {
