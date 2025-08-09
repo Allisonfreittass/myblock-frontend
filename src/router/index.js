@@ -1,6 +1,7 @@
 // router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '../components/pages/Login.vue';
+import { compile } from 'vue';
 
 const routes = [
   {
@@ -20,10 +21,16 @@ const routes = [
     redirect: '/login'
   },
   {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../components/pages/Profile.vue'),
+    meta: { requiresAuth: true, layout: 'Default' }
+  },
+  {
     path: '/dashboard',
     name: 'Dashboard',
     component: () => import('../components/pages/Dashboard.vue'),
-    meta: { layout: 'Default'}
+    meta: { requiresAuth: true, layout: 'Default'}
   }
 ];
 

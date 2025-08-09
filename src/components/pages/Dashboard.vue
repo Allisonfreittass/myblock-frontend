@@ -73,7 +73,6 @@ const properties = ref([
   color: #ffffff;
 }
 .card:hover, .property-item:hover {
-  /* Efeito de "elevar" ao passar o mouse */
   transform: translateY(-1px);
   cursor: pointer;
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);

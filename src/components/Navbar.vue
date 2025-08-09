@@ -18,6 +18,10 @@
         <span class="material-symbols-outlined">gavel</span>
         <span class="link-text">Contratos</span>
       </router-link>
+      <router-link to="/profile" class="nav-item">
+        <span class="material-symbols-outlined">account_circle</span>
+        <span class="link-text">Perfil</span>
+      </router-link>
     </div>
   </nav>
 </template>
