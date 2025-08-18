@@ -197,7 +197,7 @@ onMounted(() => {
 }
 
 .card {
-    background: #fff;
+    background: #ffffff;
     padding: 2rem;
     border-radius: 0.5rem;
     border: 1px solid #e2e8f0;

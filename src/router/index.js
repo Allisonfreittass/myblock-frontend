@@ -31,6 +31,12 @@ const routes = [
     name: 'Dashboard',
     component: () => import('../components/pages/Dashboard.vue'),
     meta: { requiresAuth: true, layout: 'Default'}
+  },
+  {
+    path: '/contracts',
+    name: 'Contract',
+    component: () => import('../components/pages/Contracts.vue'),
+    meta: { requiresAuth: true, layout: 'Default'}
   }
 ];
 
@@ -39,4 +45,17 @@ const router = createRouter({
   routes
 });
 
+function isAuthenticate() {
+  return !!localStorage.getItem('token')
+}
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !isAuthenticate()){
+    next({ name: 'Login'})
+  } else if (to.meta.requiresGuest && isAuthenticate()) {
+    next({ name: 'Dashboard'});
+  } else {
+    next()
+  }
+})
 export default router;
