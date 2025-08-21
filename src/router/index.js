@@ -1,4 +1,3 @@
-// router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '../components/pages/Login.vue';
 import { compile } from 'vue';
@@ -33,11 +32,24 @@ const routes = [
     meta: { requiresAuth: true, layout: 'Default'}
   },
   {
-    path: '/contracts',
+    path: '/contracts/:propertyId?',
     name: 'Contract',
     component: () => import('../components/pages/Contracts.vue'),
     meta: { requiresAuth: true, layout: 'Default'}
+  },
+  {
+    path: '/properties',
+    name: 'Properties',
+    component: () => import('../components/pages/Properties.vue'),
+    meta: { layout: 'Default'}
+  },
+    {
+    path: '/properties/create',
+    name: 'CreateProperty',
+    component: () => import('../components/pages/CreateProperty.vue'),
+    meta: { requiresAuth: true, layout: 'Default'}
   }
+
 ];
 
 const router = createRouter({
