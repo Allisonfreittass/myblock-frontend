@@ -12,7 +12,7 @@
           <h3 class="property-title">{{ prop.title }}</h3>
           <p class="property-owner">Proprietário: {{ prop.owner.name || 'Não informado' }}</p>
           <p class="property-rent">{{ prop.rentAmount }} ETH / mês</p>
-          <router-link :to="{ name: 'Contract', params: { propertyId: prop._id } }" class="rent-btn">Alugar Agora</router-link>
+          <router-link :to="{ name: 'CreateContract', params: { propertyId: prop._id } }" class="rent-btn">Alugar Agora</router-link>
         </div>
       </div>
     </div>

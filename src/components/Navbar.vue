@@ -18,9 +18,13 @@
         <span class="material-symbols-outlined">add_business</span>
         <span class="link-text">Cadastrar Imóvel</span>
       </router-link>
-      <router-link to="/contracts" class="nav-item">
+      <router-link to="/contracts/create" class="nav-item">
         <span class="material-symbols-outlined">gavel</span>
         <span class="link-text">Contratos</span>
+      </router-link>
+            <router-link to="/my-contracts" class="nav-item">
+        <span class="material-symbols-outlined">contract</span>
+        <span class="link-text">Meus Contratos</span>
       </router-link>
     </div>
 

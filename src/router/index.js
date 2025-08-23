@@ -31,10 +31,16 @@ const routes = [
     component: () => import('../components/pages/Dashboard.vue'),
     meta: { requiresAuth: true, layout: 'Default'}
   },
+ {
+    path: '/contracts/create/:propertyId?', // Caminho mais específico
+    name: 'CreateContract', // Nome mais claro
+    component: () => import('../components/pages/Contracts.vue'), // O componente que você já tinha
+    meta: { requiresAuth: true, layout: 'Default'}
+  },
   {
-    path: '/contracts/:propertyId?',
-    name: 'Contract',
-    component: () => import('../components/pages/Contracts.vue'),
+    path: '/my-contracts', 
+    name: 'MyContracts',
+    component: () => import('../components/pages/MyContracts.vue'), 
     meta: { requiresAuth: true, layout: 'Default'}
   },
   {
