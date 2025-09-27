@@ -46,6 +46,10 @@
             <input id="city" type="text" v-model="newProperty.location.city" required />
           </div>
           <div class="field-group">
+            <label for="neighborhood">Bairro</label>
+            <input id="neighborhood" type="text" v-model="newProperty.location.neighborhood" required />
+           </div>
+          <div class="field-group">
             <label for="state">Estado</label>
             <input id="state" type="text" v-model="newProperty.location.state" required />
           </div>
@@ -54,8 +58,8 @@
         <div class="form-section">
           <h3>Detalhes do Imóvel</h3>
           <div class="field-group">
-            <label for="propertyType">Tipo de Imóvel</label>
-            <select id="propertyType" v-model="newProperty.details.propertyType">
+            <label for="PropertyType">Tipo de Imóvel</label>
+            <select id="PropertyType" v-model="newProperty.details.PropertyType">
               <option>Apartamento</option>
               <option>Casa</option>
               <option>Kitnet</option>
@@ -143,7 +147,7 @@ const initialFormState = {
     state: ''
   },
   details: {
-    propertyType: 'Apartamento', 
+    PropertyType: 'Apartamento', 
     area: '',
     bedrooms: '',
     bathrooms: '',

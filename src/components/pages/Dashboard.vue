@@ -2,7 +2,7 @@
   <div>
     <h1 class="page-title">DASHBOARD</h1>
 
-    <div class="summary-cards">
+    <div v-if="properties && contracts" class="summary-cards">
       <div class="card">
         <h3>Properties</h3>
         <span class="count">{{ properties.length }}</span>
@@ -12,41 +12,78 @@
         <span class="count">{{ contracts.length }}</span>
       </div>
     </div>
+    <div v-else>
+      <p>Loading data...</p>
+    </div>
 
-    <div class="properties-section">
+    <div v-if="properties" class="properties-section">
       <h2>PROPRIEDADES</h2>
       <div class="property-list">
-        <div v-for="prop in properties" :key="prop.id" class="property-item">
-          <img :src="prop.imageUrl" :alt="prop.address" class="property-image" />
-          <div class="property-details">
-            <p class="address">{{ prop.address }}</p>
-            <p class="info">{{ prop.details }}</p>
-          </div>
+        <div v-for="prop in properties" :key="prop._id" class="property-item" @click="openDetailsModal(prop)">
+          <img :src="prop.imageUrls[0]" :alt="prop.address" class="property-image" />
+        <div class="property-item">
+          <span><strong>{{ prop.title }}</strong></span>
+        </div>
+        <div class="property-info-list">
+            <span><strong>Tipo:</strong> {{ prop.details.PropertyType }}</span>
+            <span><strong>Área:</strong> {{ prop.details.area }} m²</span>
+            <span><strong>Quartos:</strong> {{ prop.details.bedrooms }}</span>
+            <span><strong>Banheiros:</strong> {{ prop.details.bathrooms }}</span>
+            <span><strong>Vagas:</strong> {{ prop.details.garageSpots }}</span>
+            <span><strong>Mobiliado:</strong> {{ prop.details.isFurnished ? 'Sim' : 'Não' }}</span>
+        </div>
         </div>
       </div>
     </div>
+    <PropertyModal v-if="isModalVisible":property='selectedProperty'@close='closeDetailsModal'/>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted} from 'vue'
 import axios from 'axios'
+import Properties from './Properties.vue';
+import PropertyModal from '../../modal/Property.vue';
 
 const properties = ref([])
 const contracts = ref([])
 
+const isModalVisible = ref(false)
+const selectedProperty = ref(null)
+
+function openDetailsModal(property) {
+  selectedProperty.value = property;
+  isModalVisible.value = true
+}
+
+function closeDetailsModal(){
+  isModalVisible.value = false
+  selectedProperty.value = null
+}
+
 async function fetchProperties() {
   try {
-  const response = axios.get('http://localhost:3000/api/properties')
-  properties.value = response.data
+    const response = await axios.get('http://localhost:3000/api/properties');
+    const formattedProperties = response.data.map(prop => {
+      if (typeof prop.details === 'string') {
+        try {
+          prop.details = JSON.parse(prop.details);
+        } catch (e) {
+          console.error('Erro ao fazer o parse dos detalhes:', prop.details);
+          prop.details = {}; 
+        }
+      }
+      return prop;
+    });
+    properties.value = formattedProperties;
   } catch (error) {
-    console.error('erro ao buscar propriedade', error)
+    console.error('erro ao buscar propriedade', error);
   }
 }
 
 async function fetchContracts() {
   try {
-    const response = axios.get('http://localhost:3000/api/contracts')
+    const response = await axios.get('http://localhost:3000/api/contracts')
     contracts.value = response.data
   } catch (error) {
     console.error('error ao buscar contratos', error)
@@ -103,6 +140,19 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+}
+.property-info-list {
+  color: #bdc1c6; /* Cor mais suave para os detalhes */
+  font-size: 0.9rem;
+  display: flex;
+  flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+  gap: 0.5rem 1rem; /* Espaçamento vertical e horizontal entre os itens */
+  margin-top: 0.5rem;
+}
+
+.property-info-list span {
+  display: inline-block; 
 }
 .property-item {
   display: flex;

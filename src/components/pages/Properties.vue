@@ -7,7 +7,7 @@
     
     <div v-else class="properties-grid">
       <div v-for="prop in properties" :key="prop._id" class="property-card">
-        <img :src="prop.imageUrl" :alt="prop.title" class="property-image" />
+        <img :src="prop.imageUrls[0]" :alt="prop.title" class="property-image" />
         <div class="property-info">
           <h3 class="property-title">{{ prop.title }}</h3>
           <p class="property-owner">Proprietário: {{ prop.owner.name || 'Não informado' }}</p>
