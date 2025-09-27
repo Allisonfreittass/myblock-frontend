@@ -129,9 +129,6 @@ const formData = ref(null);
 const isSubmitting = ref(false);
 
 onMounted(() => {
-  // ATENÇÃO: Usamos JSON.parse(JSON.stringify(...)) para criar uma "cópia profunda" (deep copy).
-  // Isso garante que, se o usuário alterar os dados no formulário e cancelar,
-  // o objeto original na lista não seja modificado.
   formData.value = JSON.parse(JSON.stringify(props.property));
 });
 
@@ -140,11 +137,10 @@ async function handleSubmit() {
   isSubmitting.value = true;
 
   try {
-    // A API de update deve receber o objeto completo com a mesma estrutura
     const updatedData = await propertyService.updateProperty(props.property._id, formData.value);
     toast.success('Imóvel atualizado com sucesso!');
     
-    emit('property-updated', updatedData.data);
+    emit('property-updated', updatedData.data.property); 
     closeModal();
   } catch (error) {
     toast.error(error.response?.data?.message || 'Falha ao atualizar o imóvel.');
