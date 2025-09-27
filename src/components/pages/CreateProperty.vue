@@ -5,32 +5,126 @@
 
     <div class="card">
       <form @submit.prevent="handleCreateProperty" class="form-container">
-        <div class="field-group">
-          <label for="title">Título do Anúncio</label>
-          <input id="title" type="text" v-model="newProperty.title" placeholder="Ex: Apartamento aconchegante no centro" required />
+        
+        <div class="form-section">
+          <h3>Informações Principais</h3>
+          <div class="field-group">
+            <label for="title">Título do Anúncio</label>
+            <input id="title" type="text" v-model="newProperty.title" placeholder="Ex: Apartamento de 2 quartos em Varginha" required />
+          </div>
+          <div class="field-group">
+            <label for="description">Descrição</label>
+            <textarea id="description" v-model="newProperty.description" rows="4" placeholder="Descreva os detalhes do imóvel..." required></textarea>
+          </div>
         </div>
-        <div class="field-group">
-          <label for="description">Descrição</label>
-          <textarea id="description" v-model="newProperty.description" rows="4" placeholder="Descreva os detalhes do imóvel, regras, etc." required></textarea>
+
+        <div class="form-section">
+          <h3>Galeria de Imagens</h3>
+            <div class="field-group">
+              <label for="imageFile" class="file-input-label">
+                <i class="fas fa-upload"></i> Escolher arquivos...
+              </label>
+              <input id="imageFile" type="file" @change="handleFileSelect" accept="image/*" multiple required class="file-input" />
+            </div>
+          <div v-if="imagePreviewUrls.length > 0" class="gallery-preview">
+            <img v-for="(url, index) in imagePreviewUrls" :key="index" :src="url" class="image-preview" />
+          </div>
         </div>
-        <div class="field-group">
-          <label for="imageUrl">URL da Imagem Principal</label>
-          <input id="imageUrl" type="text" v-model="newProperty.imageUrl" placeholder="https://..." required />
+        
+        <div class="form-section">
+          <h3>Localização</h3>
+          <div class="field-group">
+            <label for="cep">CEP</label>
+            <input id="cep" type="text" v-model="newProperty.location.cep" required />
+          </div>
+          <div class="field-group">
+            <label for="address">Endereço</label>
+            <input id="address" type="text" v-model="newProperty.location.address" required />
+          </div>
+          <div class="field-group">
+            <label for="city">Cidade</label>
+            <input id="city" type="text" v-model="newProperty.location.city" required />
+          </div>
+          <div class="field-group">
+            <label for="state">Estado</label>
+            <input id="state" type="text" v-model="newProperty.location.state" required />
+          </div>
         </div>
-        <div class="field-group">
-          <label for="rentAmount">Valor do Aluguel (em ETH)</label>
-          <input id="rentAmount" type="text" v-model="newProperty.rentAmount" placeholder="Ex: 0.1" required />
+        
+        <div class="form-section">
+          <h3>Detalhes do Imóvel</h3>
+          <div class="field-group">
+            <label for="propertyType">Tipo de Imóvel</label>
+            <select id="propertyType" v-model="newProperty.details.propertyType">
+              <option>Apartamento</option>
+              <option>Casa</option>
+              <option>Kitnet</option>
+              <option>Loft</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="area">Área (m²)</label>
+            <input id="area" type="number" v-model.number="newProperty.details.area" required />
+          </div>
+          <div class="field-group">
+            <label for="bedrooms">Quartos</label>
+            <input id="bedrooms" type="number" v-model.number="newProperty.details.bedrooms" required />
+          </div>
+          <div class="field-group">
+            <label for="bathrooms">Banheiros</label>
+            <input id="bathrooms" type="number" v-model.number="newProperty.details.bathrooms" required />
+          </div>
+          <div class="checkbox-group">
+            <input id="isFurnished" type="checkbox" v-model="newProperty.details.isFurnished" />
+            <label for="isFurnished">Mobiliado</label>
+          </div>
         </div>
-        <button type="submit" class="submit-btn" :disabled="loading">
-          {{ loading ? 'Publicando...' : 'Publicar Anúncio' }}
-        </button>
+
+        <div class="form-section">
+          <h3>Taxas e Condições</h3>
+          <div class="field-group">
+            <label for="rentAmount">Aluguel (em ETH)</label>
+            <input id="rentAmount" type="text" v-model="newProperty.fees.rentAmount" required />
+          </div>
+           <div class="field-group">
+            <label for="securityDeposit">Depósito de Segurança (em ETH)</label>
+            <input id="securityDeposit" type="text" v-model="newProperty.fees.securityDeposit" required />
+          </div>
+          <div class="checkbox-group">
+            <input id="petsAllowed" type="checkbox" v-model="newProperty.rules.petsAllowed" />
+            <label for="petsAllowed">Permite animais</label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Informações Web3</h3>
+          <div class="field-group">
+            <label for="ownerWallet">Sua Carteira (para recebimento)</label>
+            <input 
+              id="ownerWallet" 
+              type="text" 
+              v-model="newProperty.ownerWalletAddress" 
+              required 
+              readonly 
+              class="readonly-input"
+            />
+            <p class="helper-text">Endereço preenchido automaticamente a partir do seu perfil.</p>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button type="button" @click="clearForm" class="clear-btn">Limpar</button>
+          <button type="submit" class="submit-btn" :disabled="loading">
+            {{ loading ? 'Publicando...' : 'Publicar Anúncio' }}
+          </button>
+        </div>
       </form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 
@@ -38,24 +132,108 @@ const toast = useToast();
 const router = useRouter();
 const loading = ref(false);
 
-const newProperty = ref({
+const initialFormState = {
   title: '',
   description: '',
-  imageUrl: '',
-  rentAmount: ''
-});
+  location: {
+    cep: '',
+    address: '',
+    neighborhood: '',
+    city: '',
+    state: ''
+  },
+  details: {
+    propertyType: 'Apartamento', 
+    area: '',
+    bedrooms: '',
+    bathrooms: '',
+    garageSpots: 0,
+    isFurnished: false
+  },
+  rules: {
+    petsAllowed: false,
+    minLeaseMonths: 12
+  },
+  fees: {
+    rentAmount: '',
+    securityDeposit: '',
+    condoFee: ''
+  },
+  ownerWalletAddress: ''
+};
+
+const newProperty = ref({ ...initialFormState });
+
+const imageFiles = ref([]);
+const imagePreviewUrls = ref([]);
+
+ async function fetchUserProfile () {
+    try {
+      const token = localStorage.getItem('authToken')
+      if (!token) return 
+
+      const response = await fetch('http://localhost:3000/auth/me', {
+        headers: {
+          'Authorization':`Bearer ${token}`
+        }
+      });
+
+      const userData = await response.json()
+      newProperty.value.ownerWalletAddress = userData.walletAddress
+    } catch (error) {
+      console.error('Erro ao buscar perfil', error)
+      toast.error('Não foi possivel carregar a carteira automaticamente')
+    }
+  }
+
+  onMounted(() => {
+    fetchUserProfile();
+  })
+
+
+function handleFileSelect(event) {
+  const files = event.target.files; 
+  if (files) {
+    imageFiles.value = Array.from(files);
+    imagePreviewUrls.value = imageFiles.value.map(file => URL.createObjectURL(file));
+  }
+}
+
+function clearForm() {
+  newProperty.value = { ...initialFormState };
+  imageFiles.value = [];
+  imagePreviewUrls.value = [];
+  document.getElementById('imageFile').value = null;
+}
 
 async function handleCreateProperty() {
+  if (imageFiles.value.length === 0) {
+    toast.error('Por favor, selecione pelo menos uma imagem.');
+    return;
+  }
   loading.value = true;
+
+  const formData = new FormData();
+  
+  formData.append('title', newProperty.value.title);
+  formData.append('description', newProperty.value.description);
+  formData.append('ownerWalletAddress', newProperty.value.ownerWalletAddress);
+  formData.append('location', JSON.stringify(newProperty.value.location));
+  formData.append('details', JSON.stringify(newProperty.value.details));
+  formData.append('rules', JSON.stringify(newProperty.value.rules));
+  formData.append('fees', JSON.stringify(newProperty.value.fees));
+
+
+  for (const file of imageFiles.value) {
+    formData.append('imageFiles', file); 
+  }
+
   try {
     const token = localStorage.getItem('authToken');
     const response = await fetch('http://localhost:3000/api/properties', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(newProperty.value)
+      headers: { 'Authorization': `Bearer ${token}` },
+      body: formData 
     });
 
     if (!response.ok) {
@@ -64,7 +242,9 @@ async function handleCreateProperty() {
     }
 
     toast.success('Imóvel anunciado com sucesso!');
-    router.push('/properties'); // Redireciona para o marketplace
+    router.push('/properties');
+
+
 
   } catch (error) {
     toast.error(error.message);
@@ -76,14 +256,136 @@ async function handleCreateProperty() {
 </script>
 
 <style scoped>
-/* Estilos consistentes com o resto da aplicação */
-.page-title { font-size: 2rem; font-weight: bold; color: #1a202c; }
-.page-subtitle { color: #4a5568; margin-top: -1rem; margin-bottom: 2rem; }
-.card { background: #fff; padding: 2rem; border-radius: 0.5rem; border: 1px solid #e2e8f0; }
-.form-container { display: flex; flex-direction: column; gap: 1.5rem; }
-.field-group { display: flex; flex-direction: column; }
-.field-group label { margin-bottom: 0.5rem; font-weight: 500; color: #4a5568; }
-.field-group input, .field-group textarea { padding: 0.75rem; border: 1px solid #cbd5e7; border-radius: 0.375rem; font-size: 1rem; font-family: inherit; }
-.submit-btn { border: none; background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border-radius: 0.375rem; font-weight: bold; cursor: pointer; margin-top: 1rem; align-self: flex-end; }
-.submit-btn:disabled { background-color: #93c5fd; }
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+.page-subtitle {
+  color: #cccccc;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.form-section {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+}
+.form-section:first-child {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+.form-section h3 {
+  font-size: 1.25rem;
+  color: #334155;
+  margin-bottom: 1rem;
+}
+.field-group {
+  display: flex;
+  flex-direction: column;
+}
+.field-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #4a5568; /* Garante que o texto da label seja visível */
+}
+.field-group input,
+.field-group textarea,
+.field-group select {
+  padding: 0.75rem;
+  border: 1px solid #cbd5e7;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: #fff; /* Garante fundo branco */
+  color: #1e293b; /* Garante texto escuro */
+}
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem; /* Adiciona um espaço acima */
+}
+.checkbox-group input {
+  width: auto;
+}
+.checkbox-group label {
+  color: #4a5568; /* CORRIGIDO: Garante que o texto do checkbox seja visível */
+  font-weight: 500;
+}
+.gallery-preview {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.image-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.clear-btn, .submit-btn {
+  border: 1px solid transparent;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.clear-btn {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #4a5568;
+}
+.submit-btn {
+  background-color: #2563eb;
+  color: white;
+}
+.submit-btn:disabled {
+  background-color: #93c5fd;
+}
+.file-input {
+  display: none; /* Esconde o input padrão */
+}
+.file-input-label {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #cbd5e7;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  background-color: #f8fafc;
+  font-weight: 500;
+  text-align: center;
+}
+.file-input-label:hover {
+  background-color: #f1f5f9;
+}
+.readonly-input {
+  background-color: #f1f5f9;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.helper-text {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 0.5rem;
+}
 </style>

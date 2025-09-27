@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar-container">
     <div class="navbar-header">
-      <!--<img src="/src/assets/Images/logoName.png" alt="MyBlock Logo" class="logo" /> -->
+      <img src="/src/assets/Images/background.png" alt="MyBlock Logo" class="logo" />
       <span class="logo-name">MyBlock</span>
     </div>
 
@@ -113,7 +113,7 @@
   transition-delay: 0.1s; 
 }
 .logo-name {
-  margin-left: 0.75rem;
+  margin-left: 0.50rem;
   font-size: 1.5rem;
   font-weight: bold;
   color: #ffff;

@@ -12,20 +12,44 @@
           <h3 class="property-title">{{ prop.title }}</h3>
           <p class="property-owner">Proprietário: {{ prop.owner.name || 'Não informado' }}</p>
           <p class="property-rent">{{ prop.rentAmount }} ETH / mês</p>
-          <router-link :to="{ name: 'CreateContract', params: { propertyId: prop._id } }" class="rent-btn">Alugar Agora</router-link>
+          
+          <div class="card-actions">
+            <button @click="openDetailsModal(prop)" class="details-btn">Ver Detalhes</button>
+            <router-link :to="{ name: 'CreateContract', params: { propertyId: prop._id } }" class="rent-btn">Alugar</router-link>
+          </div>
         </div>
       </div>
     </div>
+
+    <PropertyModal
+      v-if="isModalVisible"
+      :property="selectedProperty"
+      @close="closeDetailsModal"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useToast } from 'vue-toastification';
+import PropertyModal from '../../modal/Property.vue';
 
 const toast = useToast();
 const properties = ref([]);
 const loading = ref(true);
+
+const isModalVisible = ref(false);
+const selectedProperty = ref(null);
+
+function openDetailsModal(property) {
+  selectedProperty.value = property;
+  isModalVisible.value = true;
+}
+
+function closeDetailsModal() {
+  isModalVisible.value = false;
+  selectedProperty.value = null;
+}
 
 async function fetchProperties() {
   loading.value = true;
@@ -91,17 +115,43 @@ onMounted(() => {
   font-size: 1.5rem;
   font-weight: bold;
   color: #1e293b;
-  margin: 0 0 auto 0; /* Empurra o aluguel para cima e o botão para baixo */
+  margin: auto 0 1rem 0; /* Ajuste na margem */
 }
-.rent-btn {
-  margin-top: 1rem;
+.loading-text, .empty-text { color: #64748b; }
+
+/* ESTILOS PARA OS NOVOS BOTÕES */
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto; /* Empurra os botões para o final do card */
+}
+
+.details-btn, .rent-btn {
+  flex-grow: 1;
+  text-align: center;
+  text-decoration: none;
   border: none;
-  background-color: #2563eb;
-  color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem;
   border-radius: 0.375rem;
   font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
-.loading-text, .empty-text { color: #64748b; }
+
+.details-btn {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+}
+.details-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.rent-btn {
+  background-color: #2563eb;
+  color: white;
+}
+.rent-btn:hover {
+  background-color: #1d4ed8;
+}
 </style>

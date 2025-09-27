@@ -32,9 +32,9 @@ const routes = [
     meta: { requiresAuth: true, layout: 'Default'}
   },
  {
-    path: '/contracts/create/:propertyId?', // Caminho mais específico
-    name: 'CreateContract', // Nome mais claro
-    component: () => import('../components/pages/Contracts.vue'), // O componente que você já tinha
+    path: '/contracts/create/:propertyId?',
+    name: 'CreateContract',
+    component: () => import('../components/pages/Contracts.vue'),
     meta: { requiresAuth: true, layout: 'Default'}
   },
   {

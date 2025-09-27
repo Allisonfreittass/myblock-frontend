@@ -9,7 +9,8 @@
       </div>
       <div class="card">
         <h3>Contracts</h3>
-        <span class="count">5</span> </div>
+        <span class="count">{{ contracts.length }}</span>
+      </div>
     </div>
 
     <div class="properties-section">
@@ -28,13 +29,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted} from 'vue'
+import axios from 'axios'
 
-const properties = ref([
-  { id: 1, address: '123 Maple St', details: '3 bathroom 1.2 bathroom', imageUrl: 'https://via.placeholder.com/150' },
-  { id: 2, address: '456 Oak Ave', details: '4 bathroom 1.4 bathroom', imageUrl: 'https://via.placeholder.com/150' },
-  { id: 3, address: '123 Maple St', details: '2 bathroom 1.2 bathroom', imageUrl: 'https://via.placeholder.com/150' },
-]);
+const properties = ref([])
+const contracts = ref([])
+
+async function fetchProperties() {
+  try {
+  const response = axios.get('http://localhost:3000/api/properties')
+  properties.value = response.data
+  } catch (error) {
+    console.error('erro ao buscar propriedade', error)
+  }
+}
+
+async function fetchContracts() {
+  try {
+    const response = axios.get('http://localhost:3000/api/contracts')
+    contracts.value = response.data
+  } catch (error) {
+    console.error('error ao buscar contratos', error)
+  }
+}
+
+onMounted(() => {
+  fetchProperties();
+  fetchContracts();
+})
 </script>
 
 <style scoped>
