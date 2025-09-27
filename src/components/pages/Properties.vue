@@ -14,8 +14,17 @@
           <p class="property-rent">{{ prop.rentAmount }} ETH / mês</p>
           
           <div class="card-actions">
-            <button @click="openDetailsModal(prop)" class="details-btn">Ver Detalhes</button>
-            <router-link :to="{ name: 'CreateContract', params: { propertyId: prop._id } }" class="rent-btn">Alugar</router-link>
+            <template v-if="loggedInUserId && prop.owner && prop.owner._id === loggedInUserId">
+              <button @click="openEditModal(prop)" class="edit-btn">Editar</button>
+              <button @click="deleteProperty(prop._id)" class="delete-btn">Excluir</button>
+            </template>
+
+            <template v-else>
+              <button @click="openDetailsModal(prop)" class="details-btn">Ver Detalhes</button>
+              <router-link :to="{ name: 'CreateContract', params: { propertyId: prop._id } }" class="rent-btn">
+                Alugar
+              </router-link>
+            </template>
           </div>
         </div>
       </div>
@@ -26,6 +35,13 @@
       :property="selectedProperty"
       @close="closeDetailsModal"
     />
+    
+    <EditProperty
+      v-if="isEditModalVisible"
+      :property="propertyToEdit"
+      @close="closeEditModal"
+      @property-updated="handlePropertyUpdate"
+    />
   </div>
 </template>
 
@@ -33,13 +49,20 @@
 import { ref, onMounted } from 'vue';
 import { useToast } from 'vue-toastification';
 import PropertyModal from '../../modal/Property.vue';
+import  { propertyService } from '../../services/propertyService';
+import { userService } from '../../services/userService';
+import EditProperty from '../../modal/EditProperty.vue'; 
 
 const toast = useToast();
 const properties = ref([]);
 const loading = ref(true);
+const loggedInUserId = ref(null)
 
 const isModalVisible = ref(false);
 const selectedProperty = ref(null);
+
+const isEditModalVisible = ref(false);
+const propertyToEdit = ref(null);
 
 function openDetailsModal(property) {
   selectedProperty.value = property;
@@ -51,22 +74,66 @@ function closeDetailsModal() {
   selectedProperty.value = null;
 }
 
+// NOVO: Funções para controlar o modal de edição
+function openEditModal(property) {
+  propertyToEdit.value = property;
+  isEditModalVisible.value = true;
+}
+
+function closeEditModal() {
+  isEditModalVisible.value = false;
+  propertyToEdit.value = null;
+}
+
+function handlePropertyUpdate(updatedProperty) {
+  const index = properties.value.findIndex(p => p._id === updatedProperty._id);
+  if (index !== -1) {
+    properties.value[index] = updatedProperty;
+  }
+  closeEditModal(); 
+}
+
+async function deleteProperty(propertyId) {
+  if (!confirm('Tem certeza de que deseja excluir este imóvel? Esta ação não pode ser desfeita.')) {
+    return;
+  }
+
+  try {
+    await propertyService.deleteProperty(propertyId);
+    properties.value = properties.value.filter(p => p._id !== propertyId);
+    
+    toast.success('Imóvel excluído com sucesso!');
+  } catch (error) {
+    toast.error(error.response?.data?.message || 'Falha ao excluir o imóvel.');
+  }
+}
+
+async function fetchCurrentUser() {
+  try {
+    const response = await userService.getCLientById();
+    const userData = response.data;
+    loggedInUserId.value = userData._id;
+  } catch(error) {
+    console.error("Erro ao buscar usuário atual", error);
+
+  }
+}
 async function fetchProperties() {
   loading.value = true;
   try {
-    const response = await fetch('http://localhost:3000/api/properties');
-    if (!response.ok) throw new Error('Falha ao buscar os imóveis.');
-    properties.value = await response.json();
+    const response = await propertyService.getProperties();
+    properties.value = await response.data;
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.message || 'Erro ao carregar os imóveis.');
     console.error(error);
   } finally {
     loading.value = false;
   }
 }
 
-onMounted(() => {
-  fetchProperties();
+onMounted(async () => {
+  await fetchCurrentUser();
+  await fetchProperties();
 });
 </script>
 
@@ -153,5 +220,33 @@ onMounted(() => {
 }
 .rent-btn:hover {
   background-color: #1d4ed8;
+}
+.edit-btn, .delete-btn {
+  flex-grow: 1;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-btn {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+}
+.edit-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.delete-btn {
+  background-color: #ef4444; /* Vermelho para exclusão */
+  color: white;
+}
+.delete-btn:hover {
+  background-color: #dc2626;
 }
 </style>

@@ -22,9 +22,13 @@
         <span class="material-symbols-outlined">gavel</span>
         <span class="link-text">Contratos</span>
       </router-link>
-            <router-link to="/my-contracts" class="nav-item">
+      <router-link to="/my-contracts" class="nav-item">
         <span class="material-symbols-outlined">contract</span>
         <span class="link-text">Meus Contratos</span>
+      </router-link>
+      <router-link to="/my-properties" class="nav-item">
+        <span class="material-symbols-outlined">roofing</span>
+        <span class="link-text">Minhas Propriedades</span>
       </router-link>
     </div>
 

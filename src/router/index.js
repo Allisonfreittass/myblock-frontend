@@ -54,7 +54,13 @@ const routes = [
     name: 'CreateProperty',
     component: () => import('../components/pages/CreateProperty.vue'),
     meta: { requiresAuth: true, layout: 'Default'}
-  }
+  },
+    {
+    path: '/my-properties',
+    name: 'MyProperties',
+    component: () => import('../components/pages/MyProperties.vue'),
+    meta: { requiresAuth: true, layout: 'Default'}
+  },
 
 ];
 
