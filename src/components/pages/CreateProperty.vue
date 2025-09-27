@@ -2,126 +2,122 @@
   <div>
     <h1 class="page-title">Anunciar Novo Imóvel</h1>
     <p class="page-subtitle">Preencha os dados abaixo para que seu imóvel fique disponível no nosso marketplace.</p>
-
     <div class="card">
-      <form @submit.prevent="handleCreateProperty" class="form-container">
-        
+      <form @submit.prevent="handleCreateProperty" class="form-container"> <!-- Seção: Informações Principais -->
         <div class="form-section">
           <h3>Informações Principais</h3>
-          <div class="field-group">
-            <label for="title">Título do Anúncio</label>
-            <input id="title" type="text" v-model="newProperty.title" placeholder="Ex: Apartamento de 2 quartos em Varginha" required />
+          <div class="field-group"> <label for="title">Título do Anúncio</label> <input id="title" type="text"
+              v-model="newProperty.title" placeholder="Ex: Apartamento de 2 quartos em Varginha" required /> </div>
+          <div class="field-group"> <label for="description">Descrição</label> <textarea id="description"
+              v-model="newProperty.description" rows="4" placeholder="Descreva os detalhes do imóvel, regras, etc..."
+              required></textarea>
           </div>
-          <div class="field-group">
-            <label for="description">Descrição</label>
-            <textarea id="description" v-model="newProperty.description" rows="4" placeholder="Descreva os detalhes do imóvel..." required></textarea>
-          </div>
-        </div>
-
+        </div> 
+        
+        <!-- Seção: Imagens -->
         <div class="form-section">
           <h3>Galeria de Imagens</h3>
-            <div class="field-group">
-              <label for="imageFile" class="file-input-label">
-                <i class="fas fa-upload"></i> Escolher arquivos...
-              </label>
-              <input id="imageFile" type="file" @change="handleFileSelect" accept="image/*" multiple required class="file-input" />
-            </div>
-          <div v-if="imagePreviewUrls.length > 0" class="gallery-preview">
-            <img v-for="(url, index) in imagePreviewUrls" :key="index" :src="url" class="image-preview" />
-          </div>
-        </div>
+          <div class="field-group"> <label for="imageFile" class="file-input-label"> <i class="fas fa-upload"></i>
+              Escolher arquivos... </label> <input id="imageFile" type="file" @change="handleFileSelect"
+              accept="image/*" multiple required class="file-input" /> </div>
+          <div v-if="imagePreviewUrls.length > 0" class="gallery-preview"> <img v-for="(url, index) in imagePreviewUrls"
+              :key="index" :src="url" class="image-preview" /> </div>
+        </div> 
         
+        <!-- Seção: Localização -->
+
         <div class="form-section">
           <h3>Localização</h3>
-          <div class="field-group">
-            <label for="cep">CEP</label>
-            <input id="cep" type="text" v-model="newProperty.location.cep" required />
+          <div class="field-group"> <label for="cep">CEP</label> <input id="cep" type="text"
+              v-model="newProperty.location.cep" placeholder="Ex: 37000-000" required /> </div>
+          <div class="field-group"> <label for="address">Endereço</label> <input id="address" type="text"
+              v-model="newProperty.location.address" placeholder="Rua Exemplo, 123" required /> </div>
+          <div class="field-group"> <label for="city">Cidade</label> <input id="city" type="text"
+              v-model="newProperty.location.city" placeholder="Ex: Varginha" required /> </div>
+          <div class="field-group"> <label for="neighborhood">Bairro</label> <input id="neighborhood" type="text"
+              v-model="newProperty.location.neighborhood" placeholder="Ex: Centro" required /> </div>
+          <div class="field-group"> <label for="state">Estado</label> <input id="state" type="text"
+              v-model="newProperty.location.state" placeholder="Ex: MG" required /> </div> <!-- Preview do mapa -->
+          <div v-if="newProperty.location.city && newProperty.location.state" class="map-preview"> 
+            <iframe 
+                width="100%" 
+                height="200" 
+                style="border:0" 
+                loading="lazy" 
+                allowfullscreen
+                :src="`https://maps.google.com/maps?q=${encodeURIComponent(newProperty.location.address + ', ' + newProperty.location.city + ', ' + newProperty.location.state)}&output=embed`">
+            </iframe>
           </div>
-          <div class="field-group">
-            <label for="address">Endereço</label>
-            <input id="address" type="text" v-model="newProperty.location.address" required />
-          </div>
-          <div class="field-group">
-            <label for="city">Cidade</label>
-            <input id="city" type="text" v-model="newProperty.location.city" required />
-          </div>
-          <div class="field-group">
-            <label for="neighborhood">Bairro</label>
-            <input id="neighborhood" type="text" v-model="newProperty.location.neighborhood" required />
-           </div>
-          <div class="field-group">
-            <label for="state">Estado</label>
-            <input id="state" type="text" v-model="newProperty.location.state" required />
-          </div>
-        </div>
-        
+        </div> 
+
+        <!-- Seção: Detalhes -->
+
         <div class="form-section">
           <h3>Detalhes do Imóvel</h3>
-          <div class="field-group">
-            <label for="PropertyType">Tipo de Imóvel</label>
-            <select id="PropertyType" v-model="newProperty.details.PropertyType">
+          <div class="field-group"> <label for="PropertyType">Tipo de Imóvel</label> <select id="PropertyType"
+              v-model="newProperty.details.PropertyType">
               <option>Apartamento</option>
               <option>Casa</option>
               <option>Kitnet</option>
               <option>Loft</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label for="area">Área (m²)</label>
-            <input id="area" type="number" v-model.number="newProperty.details.area" required />
-          </div>
-          <div class="field-group">
-            <label for="bedrooms">Quartos</label>
-            <input id="bedrooms" type="number" v-model.number="newProperty.details.bedrooms" required />
-          </div>
-          <div class="field-group">
-            <label for="bathrooms">Banheiros</label>
-            <input id="bathrooms" type="number" v-model.number="newProperty.details.bathrooms" required />
-          </div>
-          <div class="checkbox-group">
-            <input id="isFurnished" type="checkbox" v-model="newProperty.details.isFurnished" />
-            <label for="isFurnished">Mobiliado</label>
-          </div>
-        </div>
+            </select> </div>
+          <div class="field-group"> <label for="area">Área (m²)</label> <input id="area" type="number" min="10"
+              v-model.number="newProperty.details.area" placeholder="Ex: 75" required /> </div>
+          <div class="field-group"> <label for="bedrooms">Quartos</label> <input id="bedrooms" type="number" min="0"
+              v-model.number="newProperty.details.bedrooms" required /> </div>
+          <div class="field-group"> <label for="bathrooms">Banheiros</label> <input id="bathrooms" type="number" min="0"
+              v-model.number="newProperty.details.bathrooms" required /> </div>
+          <div class="field-group"> <label for="garageSpots">Vagas de Garagem</label> <input id="garageSpots"
+              type="number" min="0" v-model.number="newProperty.details.garageSpots" required /> </div>
+          <div class="checkbox-group"> <input id="isFurnished" type="checkbox"
+              v-model="newProperty.details.isFurnished" /> <label for="isFurnished">Mobiliado</label> </div>
+        </div> 
+        
+        <!-- Seção: Taxas -->
 
         <div class="form-section">
           <h3>Taxas e Condições</h3>
-          <div class="field-group">
-            <label for="rentAmount">Aluguel (em ETH)</label>
-            <input id="rentAmount" type="text" v-model="newProperty.fees.rentAmount" required />
-          </div>
-           <div class="field-group">
-            <label for="securityDeposit">Depósito de Segurança (em ETH)</label>
-            <input id="securityDeposit" type="text" v-model="newProperty.fees.securityDeposit" required />
-          </div>
-          <div class="checkbox-group">
-            <input id="petsAllowed" type="checkbox" v-model="newProperty.rules.petsAllowed" />
-            <label for="petsAllowed">Permite animais</label>
-          </div>
+          <div class="field-group"> <label for="rentAmount">Aluguel (em ETH)</label> <input id="rentAmount"
+              type="number" step="0.01" v-model.number="newProperty.fees.rentAmount" required /> </div>
+          <div class="field-group"> <label for="securityDeposit">Depósito de Segurança (em ETH)</label> <input
+              id="securityDeposit" type="number" step="0.01" v-model.number="newProperty.fees.securityDeposit"
+              required /> </div>
+          <div class="field-group"> <label for="condoFee">Taxa de Condomínio (em ETH)</label> <input id="condoFee"
+              type="number" step="0.01" v-model.number="newProperty.fees.condoFee" /> </div>
+          <div class="checkbox-group"> <input id="petsAllowed" type="checkbox"
+              v-model="newProperty.rules.petsAllowed" /> <label for="petsAllowed">Permite animais</label> </div>
         </div>
+        
+        <!-- Seção: Web3 -->
 
         <div class="form-section">
           <h3>Informações Web3</h3>
-          <div class="field-group">
-            <label for="ownerWallet">Sua Carteira (para recebimento)</label>
-            <input 
-              id="ownerWallet" 
-              type="text" 
-              v-model="newProperty.ownerWalletAddress" 
-              required 
-              readonly 
-              class="readonly-input"
-            />
-            <p class="helper-text">Endereço preenchido automaticamente a partir do seu perfil.</p>
+          <div class="field-group"> <label for="ownerWallet">Sua Carteira (para recebimento)</label> <input
+              id="ownerWallet" type="text" v-model="newProperty.ownerWalletAddress" readonly class="readonly-input"
+              required />
+            <p class="helper-text">Endereço preenchido automaticamente do seu perfil.</p>
           </div>
-        </div>
+        </div> 
+        
+        <!-- Preview final -->
 
-        <div class="action-buttons">
-          <button type="button" @click="clearForm" class="clear-btn">Limpar</button>
-          <button type="submit" class="submit-btn" :disabled="loading">
-            {{ loading ? 'Publicando...' : 'Publicar Anúncio' }}
-          </button>
-        </div>
+        <div v-if="showPreview" class="form-section preview-card">
+          <h3>Pré-visualização do Anúncio</h3>
+          <h4>{{ newProperty.title }}</h4>
+          <p>{{ newProperty.description }}</p>
+          <p><strong>Localização:</strong> {{ newProperty.location.address }}, {{ newProperty.location.city }} - {{
+            newProperty.location.state }}</p>
+          <p><strong>Valor:</strong> {{ newProperty.fees.rentAmount }} ETH/mês</p>
+          <div class="gallery-preview"> <img v-for="(url, index) in imagePreviewUrls" :key="index" :src="url"
+              class="image-preview" /> </div>
+        </div> 
+        
+        <!-- Ações -->
+
+        <div class="action-buttons"> <button type="button" @click="togglePreview" class="clear-btn"> {{ showPreview ?
+          'Fechar Preview' : 'Ver Preview' }} </button> <button type="button" @click="clearForm"
+            class="clear-btn">Limpar</button> <button type="submit" class="submit-btn" :disabled="loading"> {{ loading ?
+              'Publicando...' : 'Publicar Anúncio' }} </button> </div>
       </form>
     </div>
   </div>
@@ -135,6 +131,7 @@ import { useToast } from 'vue-toastification';
 const toast = useToast();
 const router = useRouter();
 const loading = ref(false);
+const showPreview = ref(false)
 
 const initialFormState = {
   title: '',
@@ -147,7 +144,7 @@ const initialFormState = {
     state: ''
   },
   details: {
-    PropertyType: 'Apartamento', 
+    PropertyType: 'Apartamento',
     area: '',
     bedrooms: '',
     bathrooms: '',
@@ -171,32 +168,50 @@ const newProperty = ref({ ...initialFormState });
 const imageFiles = ref([]);
 const imagePreviewUrls = ref([]);
 
- async function fetchUserProfile () {
-    try {
-      const token = localStorage.getItem('authToken')
-      if (!token) return 
+function togglePreview() { showPreview.value = !showPreview.value; }
 
-      const response = await fetch('http://localhost:3000/auth/me', {
-        headers: {
-          'Authorization':`Bearer ${token}`
-        }
-      });
-
-      const userData = await response.json()
-      newProperty.value.ownerWalletAddress = userData.walletAddress
-    } catch (error) {
-      console.error('Erro ao buscar perfil', error)
-      toast.error('Não foi possivel carregar a carteira automaticamente')
+async function fetchUserProfile() {
+  try {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      toast.info('Você precisa estar logado para criar um anúncio.');
+      router.push('/login');
+      return;
     }
-  }
 
-  onMounted(() => {
-    fetchUserProfile();
-  })
+    const response = await fetch('http://localhost:3000/auth/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Falha ao buscar dados do usuário.');
+    }
+
+    const userData = await response.json();
+
+    if (userData && userData.walletAddress) {
+      newProperty.value.ownerWalletAddress = userData.walletAddress;
+    } else {
+      throw new Error('Endereço da carteira não encontrado no perfil do usuário.');
+    }
+
+  } catch (error) {
+    console.error('Erro ao buscar perfil:', error);
+    toast.error(error.message || 'Não foi possível carregar a carteira automaticamente.');
+  }
+}
+
+
+onMounted(() => {
+  fetchUserProfile();
+})
 
 
 function handleFileSelect(event) {
-  const files = event.target.files; 
+  const files = event.target.files;
   if (files) {
     imageFiles.value = Array.from(files);
     imagePreviewUrls.value = imageFiles.value.map(file => URL.createObjectURL(file));
@@ -218,7 +233,7 @@ async function handleCreateProperty() {
   loading.value = true;
 
   const formData = new FormData();
-  
+
   formData.append('title', newProperty.value.title);
   formData.append('description', newProperty.value.description);
   formData.append('ownerWalletAddress', newProperty.value.ownerWalletAddress);
@@ -229,7 +244,7 @@ async function handleCreateProperty() {
 
 
   for (const file of imageFiles.value) {
-    formData.append('imageFiles', file); 
+    formData.append('imageFiles', file);
   }
 
   try {
@@ -237,7 +252,7 @@ async function handleCreateProperty() {
     const response = await fetch('http://localhost:3000/api/properties', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` },
-      body: formData 
+      body: formData
     });
 
     if (!response.ok) {
@@ -265,46 +280,56 @@ async function handleCreateProperty() {
   font-weight: bold;
   color: #ffffff;
 }
+
 .page-subtitle {
   color: #cccccc;
   margin-top: 1rem;
   margin-bottom: 2rem;
 }
+
 .card {
   background: #fff;
   padding: 2rem;
   border-radius: 0.5rem;
   border: 1px solid #e2e8f0;
 }
+
 .form-container {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
+
 .form-section {
   border-top: 1px solid #e2e8f0;
   padding-top: 1.5rem;
   margin-top: 1.5rem;
 }
+
 .form-section:first-child {
   border-top: none;
   margin-top: 0;
   padding-top: 0;
 }
+
 .form-section h3 {
   font-size: 1.25rem;
   color: #334155;
   margin-bottom: 1rem;
 }
+
 .field-group {
   display: flex;
   flex-direction: column;
 }
+
 .field-group label {
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #4a5568; /* Garante que o texto da label seja visível */
+  color: #4a5568;
+  /* Garante que o texto da label seja visível */
 }
+
 .field-group input,
 .field-group textarea,
 .field-group select {
@@ -313,61 +338,79 @@ async function handleCreateProperty() {
   border-radius: 0.375rem;
   font-size: 1rem;
   font-family: inherit;
-  background-color: #fff; /* Garante fundo branco */
-  color: #1e293b; /* Garante texto escuro */
+  background-color: #fff;
+  /* Garante fundo branco */
+  color: #1e293b;
+  /* Garante texto escuro */
 }
+
 .checkbox-group {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 0.5rem; /* Adiciona um espaço acima */
+  margin-top: 0.5rem;
+  /* Adiciona um espaço acima */
 }
+
 .checkbox-group input {
   width: auto;
 }
+
 .checkbox-group label {
-  color: #4a5568; /* CORRIGIDO: Garante que o texto do checkbox seja visível */
+  color: #4a5568;
+  /* CORRIGIDO: Garante que o texto do checkbox seja visível */
   font-weight: 500;
 }
+
 .gallery-preview {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
+
 .image-preview {
   width: 100px;
   height: 100px;
   object-fit: cover;
   border-radius: 0.375rem;
 }
+
 .action-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
   margin-top: 1rem;
 }
-.clear-btn, .submit-btn {
+
+.clear-btn,
+.submit-btn {
   border: 1px solid transparent;
   padding: 0.75rem 1.5rem;
   border-radius: 0.375rem;
   font-weight: bold;
   cursor: pointer;
 }
+
 .clear-btn {
   background: #f1f5f9;
   border-color: #e2e8f0;
   color: #4a5568;
 }
+
 .submit-btn {
   background-color: #2563eb;
   color: white;
 }
+
 .submit-btn:disabled {
   background-color: #93c5fd;
 }
+
 .file-input {
-  display: none; /* Esconde o input padrão */
+  display: none;
+  /* Esconde o input padrão */
 }
+
 .file-input-label {
   display: inline-block;
   padding: 0.75rem 1.5rem;
@@ -378,9 +421,11 @@ async function handleCreateProperty() {
   font-weight: 500;
   text-align: center;
 }
+
 .file-input-label:hover {
   background-color: #f1f5f9;
 }
+
 .readonly-input {
   background-color: #f1f5f9;
   cursor: not-allowed;
@@ -391,5 +436,18 @@ async function handleCreateProperty() {
   font-size: 0.875rem;
   color: #64748b;
   margin-top: 0.5rem;
+}
+
+.map-preview {
+  margin-top: 1rem;
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.preview-card {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e2e8f0;
 }
 </style>
