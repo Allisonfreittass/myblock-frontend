@@ -445,7 +445,7 @@ async function handleCreateProperty() {
 }
 
 .preview-card {
-  background: #f8fafc;
+  background: #165fa8;
   padding: 1rem;
   border-radius: 0.375rem;
   border: 1px solid #e2e8f0;
