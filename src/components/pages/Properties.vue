@@ -11,20 +11,24 @@
         <div class="property-info">
           <h3 class="property-title">{{ prop.title }}</h3>
           <p class="property-owner">Proprietário: {{ prop.owner.name || 'Não informado' }}</p>
-          <p class="property-rent">{{ prop.rentAmount }} ETH / mês</p>
+          <p class="property-rent">{{ prop.fees.rentAmount }} ETH / mês</p>
           
           <div class="card-actions">
-            <template v-if="loggedInUserId && prop.owner && prop.owner._id === loggedInUserId">
-              <button @click="openEditModal(prop)" class="edit-btn">Editar</button>
-              <button @click="deleteProperty(prop._id)" class="delete-btn">Excluir</button>
-            </template>
+          <template v-if="loggedInUserId && prop.owner && prop.owner._id === loggedInUserId">
+            <button @click="openEditModal(prop)" class="edit-btn">Editar</button>
+            
+            <router-link :to="{ name: 'CreateContract', params: { propertyId: prop._id } }" class="rent-btn">
+              Criar Contrato
+            </router-link>
+          </template>
 
-            <template v-else>
-              <button @click="openDetailsModal(prop)" class="details-btn">Ver Detalhes</button>
-              <router-link :to="{ name: 'CreateContract', params: { propertyId: prop._id } }" class="rent-btn">
-                Alugar
-              </router-link>
-            </template>
+          <template v-else>
+            <button @click="openDetailsModal(prop)" class="details-btn">Ver Detalhes</button>
+            
+            <button @click="handleRentRequest(prop)" class="rent-btn">
+              Tenho Interesse
+            </button>
+        </template>
           </div>
         </div>
       </div>
@@ -52,6 +56,7 @@ import PropertyModal from '../../modal/Property.vue';
 import  { propertyService } from '../../services/propertyService';
 import { userService } from '../../services/userService';
 import EditProperty from '../../modal/EditProperty.vue'; 
+import { requestService } from '../../services/requestService'
 
 const toast = useToast();
 const properties = ref([]);
@@ -74,7 +79,6 @@ function closeDetailsModal() {
   selectedProperty.value = null;
 }
 
-// NOVO: Funções para controlar o modal de edição
 function openEditModal(property) {
   propertyToEdit.value = property;
   isEditModalVisible.value = true;
@@ -112,12 +116,32 @@ async function fetchCurrentUser() {
   try {
     const response = await userService.getCLientById();
     const userData = response.data;
-    loggedInUserId.value = userData._id;
+    loggedInUserId.value = userData;
+    console.log(loggedInUserId)
   } catch(error) {
     console.error("Erro ao buscar usuário atual", error);
 
   }
 }
+
+async function handleRentRequest(property) {
+  if (!loggedInUserId.value || !loggedInUserId.value.walletAddress) {
+    toast.error('Você precisa estar logado e ter uma carteira cadastrada para solicitar.');
+    return;
+  }
+
+  try {
+    await requestService.createRequest({
+      propertyId: property._id,
+      ownerId: property.owner._id,
+    });
+    
+    toast.success('Interesse enviado ao proprietário! Você será notificado se ele aprovar.');
+  } catch (error) {
+    toast.error(error.response?.data?.message || 'Erro ao enviar solicitação.');
+  }
+}
+
 async function fetchProperties() {
   loading.value = true;
   try {

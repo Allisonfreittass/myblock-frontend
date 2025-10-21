@@ -49,18 +49,24 @@ const routes = [
     component: () => import('../components/pages/Properties.vue'),
     meta: { layout: 'Default'}
   },
-    {
+  {
     path: '/properties/create',
     name: 'CreateProperty',
     component: () => import('../components/pages/CreateProperty.vue'),
     meta: { requiresAuth: true, layout: 'Default'}
   },
-    {
+  {
     path: '/my-properties',
     name: 'MyProperties',
     component: () => import('../components/pages/MyProperties.vue'),
     meta: { requiresAuth: true, layout: 'Default'}
   },
+  {
+    path: '/requests',
+    name: 'RentRequests',
+    component: () => import('../components/pages/RentRequests.vue'),
+    meta: { requiresAuth: true, layout: 'Default'}
+  }
 
 ];
 

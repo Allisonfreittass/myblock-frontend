@@ -14,6 +14,10 @@
         <span class="material-symbols-outlined">apartment</span>
         <span class="link-text">Propriedades</span>
       </router-link>
+      <router-link to="/requests" class="nav-item">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="link-text">Minhas Solicitações</span>
+      </router-link>
       <router-link to="/properties/create"class="nav-item">
         <span class="material-symbols-outlined">add_business</span>
         <span class="link-text">Cadastrar Imóvel</span>

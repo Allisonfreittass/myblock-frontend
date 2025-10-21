@@ -8,7 +8,7 @@
       <form @submit.prevent="handleCreateContract" class="form-container">
         <div class="field-group">
           <label for="tenant-address">Endereço da Carteira do Locatário</label>
-          <input id="tenant-address" type="text" v-model="newContract.locatario" placeholder="0x..." required />
+          <input id="tenant-address" type="text" v-model="newContract.locatario" placeholder="0x..." required :disabled="!!route.query.tenantWallet"/>
         </div>
         <div class="field-group">
           <label for="rent-value">Valor do Aluguel (em ETH)</label>
@@ -54,7 +54,7 @@ async function fetchPropertyDetails(propertyId) {
     const data = await response.json();
     property.value = data;
     
-    newContract.value.valor = data.rentAmount;
+    newContract.value.valor = data.fees.rentAmount;
     newContract.value.imovel = data.title; 
 
   } catch (error) {
@@ -102,6 +102,13 @@ onMounted(() => {
   const propertyId = route.params.propertyId;
   if (propertyId) {
     fetchPropertyDetails(propertyId);
+  }
+
+  const tenantWallet = route.query.tenantWallet;
+  const requestId = route.query.requestId;
+
+  if (tenantWallet) {
+    newContract.value.locatario = tenantWallet;
   }
 });
 </script>
