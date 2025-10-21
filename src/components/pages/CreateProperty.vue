@@ -275,6 +275,7 @@ async function handleCreateProperty() {
 </script>
 
 <style scoped>
+/* Estilos Base (Light Mode) */
 .page-title {
   font-size: 2rem;
   font-weight: bold;
@@ -327,7 +328,6 @@ async function handleCreateProperty() {
   margin-bottom: 0.5rem;
   font-weight: 500;
   color: #4a5568;
-  /* Garante que o texto da label seja visível */
 }
 
 .field-group input,
@@ -339,9 +339,7 @@ async function handleCreateProperty() {
   font-size: 1rem;
   font-family: inherit;
   background-color: #fff;
-  /* Garante fundo branco */
   color: #1e293b;
-  /* Garante texto escuro */
 }
 
 .checkbox-group {
@@ -349,7 +347,6 @@ async function handleCreateProperty() {
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.5rem;
-  /* Adiciona um espaço acima */
 }
 
 .checkbox-group input {
@@ -358,7 +355,6 @@ async function handleCreateProperty() {
 
 .checkbox-group label {
   color: #4a5568;
-  /* CORRIGIDO: Garante que o texto do checkbox seja visível */
   font-weight: 500;
 }
 
@@ -396,19 +392,24 @@ async function handleCreateProperty() {
   border-color: #e2e8f0;
   color: #4a5568;
 }
+.clear-btn:hover {
+  background-color: #e2e8f0;
+}
 
 .submit-btn {
   background-color: #2563eb;
   color: white;
 }
-
+.submit-btn:hover {
+  background-color: #1d4ed8;
+}
 .submit-btn:disabled {
   background-color: #93c5fd;
+  opacity: 0.7;
 }
 
 .file-input {
   display: none;
-  /* Esconde o input padrão */
 }
 
 .file-input-label {
@@ -449,5 +450,77 @@ async function handleCreateProperty() {
   padding: 1rem;
   border-radius: 0.375rem;
   border: 1px solid #e2e8f0;
+  color: #ffffff; 
+}
+
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: #1f2937; /* gray-800 */
+    border-color: #374151; /* gray-700 */
+  }
+
+  .form-section {
+    border-color: #374151; /* gray-700 */
+  }
+
+  .form-section h3 {
+    color: #f3f4f6; /* gray-100 */
+  }
+
+  .field-group label,
+  .checkbox-group label {
+    color: #d1d5db; /* gray-300 */
+  }
+
+  .field-group input,
+  .field-group textarea,
+  .field-group select {
+    background: #374151; /* gray-700 */
+    border-color: #4b5563; /* gray-600 */
+    color: #ffffff;
+  }
+  
+  .field-group input::placeholder,
+  .field-group textarea::placeholder {
+    color: #9ca3af; /* gray-400 */
+  }
+
+  .readonly-input {
+    background-color: #4b5563; /* gray-600 */
+    color: #d1d5db;
+    opacity: 0.7;
+  }
+  
+  .helper-text {
+    color: #9ca3af; /* gray-400 */
+  }
+
+  .file-input-label {
+    background-color: #374151; /* gray-700 */
+    border-color: #4b5563; /* gray-600 */
+    color: #f3f4f6; /* gray-100 */
+  }
+  .file-input-label:hover {
+    background-color: #4b5563; /* gray-600 */
+  }
+
+  .clear-btn {
+    background: #374151; /* gray-700 */
+    border-color: #4b5563; /* gray-600 */
+    color: #f3f4f6; /* gray-100 */
+  }
+  .clear-btn:hover {
+     background: #4b5563; /* gray-600 */
+  }
+
+  .submit-btn:disabled {
+    background-color: #1e40af; /* Azul mais escuro */
+    opacity: 0.6;
+  }
+
+  .preview-card {
+    border-color: #374151; /* gray-700 */
+    /* O fundo azul e o texto branco (corrigido acima) já funcionam bem */
+  }
 }
 </style>

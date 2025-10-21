@@ -117,7 +117,6 @@ async function fetchCurrentUser() {
     const response = await userService.getCLientById();
     const userData = response.data;
     loggedInUserId.value = userData;
-    console.log(loggedInUserId)
   } catch(error) {
     console.error("Erro ao buscar usuário atual", error);
 
