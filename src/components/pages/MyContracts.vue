@@ -85,7 +85,6 @@ async function fetchContracts() {
   }
 }
 
-// === Cancelar contrato ===
 async function confirmCancel(id) {
   if (!confirm('Tem certeza que deseja cancelar este contrato?')) return
   await cancelContract(id)

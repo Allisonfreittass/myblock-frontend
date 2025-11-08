@@ -2,12 +2,13 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import router from './router'
-
+import VueFeather from 'vue-feather'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
 
 const app = createApp(App)
+app.component(VueFeather.name, VueFeather)
 
 const options = {
     position: "top-right",
