@@ -9,7 +9,8 @@ export const requestService = {
     return apiClient.post('api/rent-requests', data)
   },
 
-  updateRequest(id, data) {
-    return apiClient.put(`api/rent-requests/${id}/status`, data)
+  updateRequest(id, newStatus) {
+    const payload = { status: newStatus };
+    return apiClient.put(`api/rent-requests/${id}/status`, payload)
   }
 }

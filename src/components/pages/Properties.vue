@@ -14,8 +14,9 @@
           <p class="property-rent">{{ prop.fees.rentAmount }} ETH / mês</p>
           
           <div class="card-actions">
-          <template v-if="loggedInUserId && prop.owner && prop.owner._id === loggedInUserId">
+          <template v-if="loggedInUser && prop.owner && prop.owner._id === loggedInUser._id">
             <button @click="openEditModal(prop)" class="edit-btn">Editar</button>
+            <button @click="deleteProperty(prop._id)" class="delete-btn">Excluir</button>
             
             <router-link :to="{ name: 'CreateContract', params: { propertyId: prop._id } }" class="rent-btn">
               Criar Contrato
@@ -24,7 +25,6 @@
 
           <template v-else>
             <button @click="openDetailsModal(prop)" class="details-btn">Ver Detalhes</button>
-            
             <button @click="handleRentRequest(prop)" class="rent-btn">
               Tenho Interesse
             </button>
@@ -61,7 +61,7 @@ import { requestService } from '../../services/requestService'
 const toast = useToast();
 const properties = ref([]);
 const loading = ref(true);
-const loggedInUserId = ref(null)
+const loggedInUser = ref(null)
 
 const isModalVisible = ref(false);
 const selectedProperty = ref(null);
@@ -116,7 +116,7 @@ async function fetchCurrentUser() {
   try {
     const response = await userService.getCLientById();
     const userData = response.data;
-    loggedInUserId.value = userData;
+    loggedInUser.value = userData;
   } catch(error) {
     console.error("Erro ao buscar usuário atual", error);
 
@@ -124,7 +124,7 @@ async function fetchCurrentUser() {
 }
 
 async function handleRentRequest(property) {
-  if (!loggedInUserId.value || !loggedInUserId.value.walletAddress) {
+  if (!loggedInUser.value || !loggedInUser.value.walletAddress) {
     toast.error('Você precisa estar logado e ter uma carteira cadastrada para solicitar.');
     return;
   }

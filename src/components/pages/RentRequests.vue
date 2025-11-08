@@ -23,7 +23,7 @@
           
           <div class="card-image-wrapper">
             <img 
-              :src="req.property.images?.[0] || 'https://via.placeholder.com/400x250.png?text=Imóvel+sem+foto'" 
+              :src="req.property.imageUrls?.[0] || 'https://via.placeholder.com/400x250.png?text=Imóvel+sem+foto'" 
               alt="Foto do imóvel" 
               class="property-image"
             />
@@ -40,7 +40,7 @@
 
             <div class="tenant-info">
               <img 
-                :src="req.tenant.avatarUrl || 'https://via.placeholder.com/50.png?text=User'" 
+                :src="req.tenant.profilePictureUrl || 'https://via.placeholder.com/50.png?text=User'" 
                 alt="Avatar" 
                 class="tenant-avatar"
               />
@@ -149,7 +149,7 @@ async function rejectRequest(requestId) {
   updatingRequests.value.push(requestId); 
   
   try {
-    await requestService.updateRequestStatus(requestId, 'rejected'); 
+    await requestService.updateRequest(requestId, 'rejected'); 
     const index = allRequests.value.findIndex(r => r._id === requestId);
     if (index !== -1) {
       allRequests.value[index].status = 'rejected';

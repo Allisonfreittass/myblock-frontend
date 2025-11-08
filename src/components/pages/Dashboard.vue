@@ -47,6 +47,8 @@ import PropertyModal from '../../modal/Property.vue';
 
 const properties = ref([])
 const contracts = ref([])
+const isLoading = ref(true) 
+const error = ref(null)
 
 const isModalVisible = ref(false)
 const selectedProperty = ref(null)
@@ -61,9 +63,10 @@ function closeDetailsModal(){
   selectedProperty.value = null
 }
 
-async function fetchProperties() {
+async function fetchProperties(userId) {
   try {
-    const response = await axios.get('http://localhost:3000/api/properties');
+    const response = await axios.get(`http://localhost:3000/api/properties?owner=${userId}`);
+    
     const formattedProperties = response.data.map(prop => {
       if (typeof prop.details === 'string') {
         try {
@@ -76,23 +79,41 @@ async function fetchProperties() {
       return prop;
     });
     properties.value = formattedProperties;
-  } catch (error) {
-    console.error('erro ao buscar propriedade', error);
+  } catch (err) {
+    console.error('erro ao buscar propriedade', err);
+    error.value = 'Não foi possível carregar suas propriedades.'
   }
 }
 
-async function fetchContracts() {
+async function fetchContracts(userId) {
   try {
-    const response = await axios.get('http://localhost:3000/api/contracts')
+    const response = await axios.get(`http://localhost:3000/api/contracts?owner=${userId}`)
     contracts.value = response.data
-  } catch (error) {
-    console.error('error ao buscar contratos', error)
+  } catch (err) {
+    console.error('error ao buscar contratos', err)
+    error.value = 'Não foi possível carregar seus contratos.'
   }
 }
 
-onMounted(() => {
-  fetchProperties();
-  fetchContracts();
+onMounted(async () => {
+  isLoading.value = true
+  error.value = null
+
+  const userId = localStorage.getItem('authToken'); 
+
+  if (!userId) {
+    console.error('Usuário não autenticado.');
+    error.value = 'Você precisa estar logado para ver seu dashboard.';
+    isLoading.value = false;
+    return; // Para a execução
+  }
+
+  await Promise.all([
+    fetchProperties(userId),
+    fetchContracts(userId)
+  ]);
+  
+  isLoading.value = false
 })
 </script>
 
