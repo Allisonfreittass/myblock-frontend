@@ -166,13 +166,24 @@ function closeModal() {
   background: white; padding: 2rem; border-radius: 0.5rem;
   width: 90%; max-width: 800px; position: relative;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  
+  /* --- ADICIONE ESTAS DUAS LINHAS --- */
+  max-height: 90vh; /* Limita a altura a 90% da altura da janela */
+  overflow-y: auto; /* Adiciona scroll apenas dentro do modal se necessário */
 }
+
 .modal-title { margin-top: 0; color: #1e293b; }
 .close-btn {
   position: absolute; top: 1rem; right: 1rem; border: none;
   background: transparent; font-size: 1.5rem; cursor: pointer;
 }
-.edit-form { display: flex; flex-direction: column; gap: 1.5rem; }
+.edit-form { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.5rem;
+  overflow-y: auto; /* O scroll passa para cá */
+  padding-right: 0.5rem; /* Evita que o scroll fique em cima do conteúdo */
+}
 .form-group { display: flex; flex-direction: column; }
 .form-group label { margin-bottom: 0.5rem; font-weight: bold; color: #334155; }
 .form-group input, .form-group textarea {
